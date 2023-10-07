@@ -10,11 +10,15 @@
             //Console.WindowWidth = 200;
 
             Snake snake = new Snake();
-            //snake.MakeBorder();
-            snake.MakeBorder(true);
-            snake.TestMovement();
-
-            Console.ReadKey();
+            //snake.MakeBorder(false);
+            //snake.MakeBorder(true);
+            //snake.TestMovement();
+            do
+            {
+                Console.Clear();
+                snake.MakeBorder(false);
+                snake.RunSnake();
+            } while (snake.playAgain == true);
         }
     }
 }
