@@ -1,6 +1,6 @@
 ﻿namespace Snake_like
 {
-    internal class MainGame
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -9,16 +9,16 @@
             //Console.WindowHeight = 200;
             //Console.WindowWidth = 200;
 
-            Snake snake = new Snake();
+            Game game = new Game();
             //snake.MakeBorder(false);
             //snake.MakeBorder(true);
             //snake.TestMovement();
             do
             {
                 Console.Clear();
-                snake.MakeBorder(false);
-                snake.RunSnake();
-            } while (snake.playAgain == true);
+                game.MakeBorder(true);
+                game.RunSnake();
+            } while (game.playAgain == true);
         }
     }
 }
