@@ -9,9 +9,12 @@ namespace Snake_like
     public class Game
     {
         public bool playAgain { get; set; }
-        public int Screenwidth { get; set; } = Console.WindowWidth;
-        public int Screenheight { get; set; } = Console.WindowHeight;
+        public static int Screenwidth { get; set; } = Console.WindowWidth;
+        public static int Screenheight { get; set; } = Console.WindowHeight;
         public int SnakeLength { get; set; }
+        public int CurrentHighScore { get; set; }
+
+
         public void MakeBorder(bool DoInstant)      // Makes the border of the map in a fun way. (5 ms interval)
         {
             Console.CursorVisible = false;
@@ -171,8 +174,24 @@ namespace Snake_like
             // List of 1 pixel long snakes
             Snake[] snakeList = new Snake[200];
             snakeList[0] = frontSnake;
+
+            // Load global scoreboard
+
+            // DataHandler scoreHandler = new DataHandler(dataFileName);
+            // HighScore[] highScores = scoreHandler.LoadHighScores();
+            HighScore[] highScores = new HighScore[] // delete this line once the handler works.
+            {
+                new HighScore(20, "Hanky"),
+                new HighScore(2, "Dingo"),
+                new HighScore(55, "Roberozlav"),
+                new HighScore(90, "Leif"),
+                new HighScore(42069, "Jbro"),
+                new HighScore(42, "Tusindben"),
+            };
             
+
             //          #### Initialize game ####
+            bool newHighScore = false;
             bool gameOver = false;
             Console.CursorVisible = false;
             Console.SetCursorPosition(frontSnake.XPos, frontSnake.YPos);
@@ -188,7 +207,7 @@ namespace Snake_like
             while (!gameOver)
             {
 
-                Thread.Sleep(100);  // Framerate for the game (every frame is 200ms long). 
+                Thread.Sleep(150);  // Framerate for the game (every frame is 200ms long). 
 
                 if (Console.KeyAvailable)
                     ArrowKeys(frontSnake);
@@ -202,6 +221,7 @@ namespace Snake_like
                     gameOver = true;
                 else if (frontSnake.XPos >= Screenwidth - 2 && frontSnake.Direction == "RIGHT")
                     gameOver = true;
+
                 //          #### Snake Movement ####
 
                 if (SnakeLength > 1)  // Moves every part except the front.
@@ -242,25 +262,112 @@ namespace Snake_like
                     SnakeLength++;
                 }
 
+                // Add score to list if game over
+                if (gameOver && SnakeLength > CurrentHighScore)
+                {
+                    newHighScore = true;
+                    CurrentHighScore = SnakeLength;
+                }
+
                 // End of game
 
             }
-            string gameOverMessage = "Game over!";
+
+            string gameOverMessage = "GAME OVER!";
             string playAgainMessage = "Want to play again? Y/N";
+            if (newHighScore)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                string newHighScoreMessage = "New personal high score: " + CurrentHighScore;
+                Console.SetCursorPosition(Screenwidth / 2 - newHighScoreMessage.Length / 2, Screenheight / 2 + 2);
+                Console.WriteLine(newHighScoreMessage);
+                Console.SetCursorPosition(Screenwidth / 2 - gameOverMessage.Length / 2, Screenheight / 2 - 4);
+                Console.WriteLine(gameOverMessage);
+                Console.SetCursorPosition(Screenwidth / 2 - playAgainMessage.Length / 2, Screenheight / 2 - 2);
+                Console.WriteLine(playAgainMessage);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(Screenwidth / 2 - gameOverMessage.Length / 2, Screenheight / 2 - 4);
+                Console.WriteLine(gameOverMessage);
+                Console.SetCursorPosition(Screenwidth / 2 - playAgainMessage.Length / 2, Screenheight / 2 - 2);
+                Console.WriteLine(playAgainMessage);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
 
-            Console.SetCursorPosition(Screenwidth / 2 - gameOverMessage.Length / 2, Screenheight / 2);
-            Console.WriteLine(gameOverMessage);
-            Console.SetCursorPosition(Screenwidth / 2 - playAgainMessage.Length / 2, Screenheight / 2 + 1);
-            Console.WriteLine(playAgainMessage);
-
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            ConsoleKeyInfo keyInfo;
             do
             {
+                keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Y)
                     playAgain = true;
                 else if (keyInfo.Key == ConsoleKey.N)
                     playAgain = false;
             } while (keyInfo.Key != ConsoleKey.Y && keyInfo.Key != ConsoleKey.N);
+
+            if (!playAgain)
+            {
+                string submitScoreMessage = "Do you want to submit your high score? Y/N";
+                string currentHighScoreMessage = "High score: " + CurrentHighScore;
+                Console.Clear();
+                MakeBorder(true);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(Screenwidth / 2 - submitScoreMessage.Length / 2, Screenheight / 2 - 4);
+                Console.WriteLine(submitScoreMessage);
+                Console.SetCursorPosition(Screenwidth / 2 - currentHighScoreMessage.Length / 2, Screenheight / 2 - 2);
+                Console.WriteLine(currentHighScoreMessage);
+                Console.ForegroundColor = ConsoleColor.White;
+
+                ConsoleKeyInfo keyInfo1;
+                bool userNameMenu = false;
+                do
+                {
+                    keyInfo1 = Console.ReadKey(true);
+                    if (keyInfo1.Key == ConsoleKey.Y)
+                    {
+                        Console.Clear();
+                        MakeBorder(true);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        string insertNameMessage = "Enter your username: ";
+                        Console.SetCursorPosition(Screenwidth / 2 - insertNameMessage.Length / 2, Screenheight / 2 - 4);
+                        Console.Write(insertNameMessage);
+                        string userName = Console.ReadLine();
+                        string confirmMessage = "Confirm username? Y/N";
+                        Console.SetCursorPosition(Screenwidth / 2 - confirmMessage.Length / 2, Screenheight / 2 - 2);
+                        Console.Write(confirmMessage);
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        ConsoleKeyInfo keyInfoConfirmUsername;
+                        do
+                        {
+                            keyInfoConfirmUsername = Console.ReadKey(true);
+                            if (keyInfoConfirmUsername.Key == ConsoleKey.Y)
+                            {
+                                highScores[highScores.Length - 1] = new HighScore(CurrentHighScore, userName);
+                                userNameMenu = false;
+                            }
+                            else if (keyInfoConfirmUsername.Key == ConsoleKey.N)
+                            {
+                                userNameMenu = true;
+                            }
+
+                        } while (keyInfoConfirmUsername.Key != ConsoleKey.Y && keyInfoConfirmUsername.Key != ConsoleKey.N);
+
+                        Console.Clear();
+                        MakeBorder(true);
+                        Scoreboard.SortScoresDescending(highScores);
+                        Scoreboard.ShowScoreboard(highScores);
+
+                    }
+                    else if (keyInfo1.Key == ConsoleKey.N)
+                    {
+
+                    }
+
+                } while (keyInfo1.Key != ConsoleKey.Y && keyInfo1.Key != ConsoleKey.N && userNameMenu != false);
+            }
         }
     }
 }
