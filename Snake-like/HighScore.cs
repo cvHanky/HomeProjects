@@ -16,6 +16,11 @@ namespace Snake_like
             Score = score;
             PlayerName = playerName;
         }
+        public string MakeTitle()
+        {
+            string title = Score + ";" + PlayerName + ";";
+            return title;
+        }
 
         public override string ToString()
         {

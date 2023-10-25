@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            
             //Console.BufferHeight = 300;
             //Console.BufferWidth = 300;
             //Console.WindowHeight = 200;
@@ -19,11 +20,14 @@
             do
             {
                 Console.Clear();
-                game.MakeBorder(false);
+                game.MakeBorder(true);
+                Console.Clear();
+                game.MakeBorder(true);
                 game.RunSnake();
             } while (game.playAgain == true);
 
             //    #### End of game ####
+
             Console.ReadKey();
         }
     }

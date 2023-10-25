@@ -13,6 +13,7 @@ namespace Snake_like
         public static int Screenheight { get; set; } = Console.WindowHeight;
         public int SnakeLength { get; set; }
         public int CurrentHighScore { get; set; }
+        public int FrameRate { get; set; } = 75;
 
 
         public void MakeBorder(bool DoInstant)      // Makes the border of the map in a fun way. (5 ms interval)
@@ -136,26 +137,18 @@ namespace Snake_like
                 case "UP":
                     if (snake.YPos > 1)
                         snake.YPos -= 1;
-                    Console.Clear();
-                    MakeBorder(true);
                     break;
                 case "DOWN":
                     if (snake.YPos < Screenheight - 2)
                         snake.YPos += 1;
-                    Console.Clear();
-                    MakeBorder(true);
                     break;
                 case "LEFT":
                     if (snake.XPos > 2)
                         snake.XPos -= 2;
-                    Console.Clear();
-                    MakeBorder(true);
                     break;
                 case "RIGHT":
                     if (snake.XPos < Screenwidth - 3)
                         snake.XPos += 2;
-                    Console.Clear();
-                    MakeBorder(true);
                     break;
                 default:
                     break;
@@ -170,25 +163,16 @@ namespace Snake_like
             int randomYpos = random.Next(4, Screenheight);
             Snake frontSnake = new Snake(randomXpos*2,randomYpos, Directions[random.Next(Directions.Length)]);
             SnakeLength = 1;
+            int XPosToRemove = 0;
+            int YPosToRemove = 0;
 
             // List of 1 pixel long snakes
             Snake[] snakeList = new Snake[200];
             snakeList[0] = frontSnake;
 
             // Load global scoreboard
-
-            // DataHandler scoreHandler = new DataHandler(dataFileName);
-            // HighScore[] highScores = scoreHandler.LoadHighScores();
-            HighScore[] highScores = new HighScore[] // delete this line once the handler works.
-            {
-                new HighScore(20, "Hanky"),
-                new HighScore(2, "Dingo"),
-                new HighScore(55, "Roberozlav"),
-                new HighScore(90, "Leif"),
-                new HighScore(42069, "Jbro"),
-                new HighScore(42, "Tusindben"),
-            };
-            
+            DataHandler scoreHandler = new DataHandler(@"Highscores.txt");
+            HighScore[] highScores = scoreHandler.LoadHighScores();
 
             //          #### Initialize game ####
             bool newHighScore = false;
@@ -207,7 +191,7 @@ namespace Snake_like
             while (!gameOver)
             {
 
-                Thread.Sleep(150);  // Framerate for the game (every frame is 200ms long). 
+                Thread.Sleep(FrameRate);  // Framerate for the game (every frame is 200ms long). 
 
                 if (Console.KeyAvailable)
                     ArrowKeys(frontSnake);
@@ -224,11 +208,13 @@ namespace Snake_like
 
                 //          #### Snake Movement ####
 
+                XPosToRemove = snakeList[SnakeLength - 1].XPos;
+                YPosToRemove = snakeList[SnakeLength - 1].YPos;
                 if (SnakeLength > 1)  // Moves every part except the front.
                 {
                     for (int i = 1; i < SnakeLength; i++)
                     {
-                        snakeList[SnakeLength-i].XPos = snakeList[SnakeLength-i-1].XPos;
+                        snakeList[SnakeLength - i].XPos = snakeList[SnakeLength - i - 1].XPos;
                         snakeList[SnakeLength - i].YPos = snakeList[SnakeLength - i - 1].YPos;
                     }
                 }
@@ -245,11 +231,13 @@ namespace Snake_like
                     }
                 }
 
-                for (int i = 0; i < SnakeLength; i++)
-                {
-                    Console.SetCursorPosition(snakeList[i].XPos, snakeList[i].YPos);
-                    snakeList[i].WriteSnake();
-                }
+                //     #### Actual writing of the snake ####
+                Console.SetCursorPosition(snakeList[0].XPos, snakeList[0].YPos);
+                snakeList[0].WriteSnake();
+
+                //     #### Removing tail of snake ####
+                Console.SetCursorPosition(XPosToRemove, YPosToRemove);
+                Console.Write(" ");
 
                 // Check for berry pick-up
                 if (frontSnake.XPos == berry.XPos && frontSnake.YPos == berry.YPos)
@@ -259,6 +247,7 @@ namespace Snake_like
                     randomYpos = randomBerry.Next(1, Screenheight-1);
                     berry.XPos = randomXpos * 2;
                     berry.YPos = randomYpos;
+                    frontSnake.RandomizeSnakeColor();
                     SnakeLength++;
                 }
 
@@ -359,11 +348,15 @@ namespace Snake_like
                         MakeBorder(true);
                         Scoreboard.SortScoresDescending(highScores);
                         Scoreboard.ShowScoreboard(highScores);
+                        scoreHandler.SaveHighScores(highScores);
 
                     }
                     else if (keyInfo1.Key == ConsoleKey.N)
                     {
-
+                        Console.Clear();
+                        MakeBorder(true);
+                        Scoreboard.SortScoresDescendingN(highScores);
+                        Scoreboard.ShowScoreboardN(highScores);
                     }
 
                 } while (keyInfo1.Key != ConsoleKey.Y && keyInfo1.Key != ConsoleKey.N && userNameMenu != false);

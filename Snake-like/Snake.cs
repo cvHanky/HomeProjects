@@ -13,6 +13,9 @@ namespace Snake_like
         public int YPos { get; set; }
         public int Length { get; set; }
         public string Direction { get; set; }
+        public ConsoleColor ColorOfSnake { get; set; } = ConsoleColor.Red;
+        public ConsoleColor[] Colors { get; set; }
+        public Random random { get; set; }
 
 
         public Snake(int xPos, int yPos, string direction)                // Constructor for the snake. 
@@ -20,6 +23,10 @@ namespace Snake_like
             XPos = xPos;
             YPos = yPos;
             Direction = direction;
+            Colors = new ConsoleColor[] {
+            ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.DarkMagenta,
+            };
+            random = new Random();
         }
         public Snake()
         {
@@ -31,9 +38,17 @@ namespace Snake_like
         }
         public void WriteSnake()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ColorOfSnake;
             Console.Write(ToString());
             Console.ForegroundColor= ConsoleColor.White;
+        }
+        public void RandomizeSnakeColor()
+        {
+            ColorOfSnake = Colors[random.Next(Colors.Length)];
+        }
+        public static void DeleteTail()
+        {
+            Console.Write("");
         }
     }
 }
