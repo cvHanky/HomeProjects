@@ -26,18 +26,23 @@ namespace Task_Manager.Task
 
         public override string ToString()
         {
-            if (DueDate != null)
+            if (DueDate != null && Description == null)
             {
                 return $"{Name}: PRIORITY {Priority}\nDue date: {DueDate.ToString()}";
             }
-            else
+            else if (DueDate == null && Description == null)
             {
                 return $"{Name}: PRIORITY {Priority}";
             }
+            else if (DueDate != null && Description != null)
+            {
+                return $"{Name}: PRIORITY {Priority}\n{Description}\nDue date: {DueDate.ToString()}";
+            }
+            else return "";
         }
         public string FullToString()    // Used when saving the data.
         {
-            return $"{Name};{Description};{DueDate};{Priority};";
+            return $"{Name};{Description};{DueDate};{Priority}";
         }
         public static Level StringToLevel(string s)
         {
