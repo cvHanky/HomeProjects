@@ -24,7 +24,7 @@ namespace Snake_like
             YPos = yPos;
             Direction = direction;
             Colors = new ConsoleColor[] {
-            ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.DarkMagenta,
+            ConsoleColor.Red, ConsoleColor.DarkBlue, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.DarkMagenta, ConsoleColor.White, ConsoleColor.Magenta, ConsoleColor.DarkYellow, ConsoleColor.DarkRed
             };
             random = new Random();
         }

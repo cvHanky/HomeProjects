@@ -47,7 +47,7 @@ namespace Snake_like
             Console.ForegroundColor = ConsoleColor.Yellow;
             for (int i = 0; i < highScores.Length;i++)
             {
-                Console.SetCursorPosition(Game.Screenwidth / 2 - 12 / 2, Game.Screenheight / 2 - 6 + 2*i);
+                Console.SetCursorPosition(Game.Screenwidth / 2 - 12 / 2, Game.Screenheight / 2 - 10 + 2*i);
                 Console.Write((i + 1) + ". " + highScores[i].ToString());
                 if (i >= 10)
                     break;
@@ -59,7 +59,7 @@ namespace Snake_like
             Console.ForegroundColor = ConsoleColor.Yellow;
             for (int i = 0; i < highScores.Length-1; i++)
             {
-                Console.SetCursorPosition(Game.Screenwidth / 2 - 12 / 2, Game.Screenheight / 2 - 6 + 2 * i);
+                Console.SetCursorPosition(Game.Screenwidth / 2 - 12 / 2, Game.Screenheight / 2 - 10 + 2 * i);
                 Console.Write((i + 1) + ". " + highScores[i].ToString());
                 if (i >= 10)
                     break;
