@@ -9,25 +9,15 @@ namespace Task_Manager.Task
     public class TaskRepository
     {
         private List<Task> tasks = new List<Task>();
-        public string DataFileName { get; set; }
-
-        public TaskRepository(string dataFileName)
-        {
-            DataFileName = dataFileName;
-        }
-        public TaskRepository() : this("TaskRepo.txt") { }
+        private TaskDataHandler tdh;
 
         //   ####   CRUD   ####
 
-        public void AddTask(Task task)
+        public void AddTask(Task task)                  // CREATE
         {
             tasks.Add(task);
         }
-        public void RemoveTask(Task task)
-        {
-            tasks.Remove(task);
-        }
-        public Task? GetTask(string searchID)
+        public Task? GetTask(string searchID)           // READ
         {
             Task? task = null;
             foreach (Task t in tasks)
@@ -35,60 +25,39 @@ namespace Task_Manager.Task
                 if (searchID.ToUpper() == t.Name.ToUpper())
                     task = t;
             }
-            //if (task == null)
-            //    throw new Exception("No task with that name was found.");
+            if (task == null)
+                throw new Exception("No task with that name was found.");
             return task;
+        }
+        public void UpdateTask(Task task, string name)  // UPDATE
+        {
+            task.Name = name;
+        }
+        public void UpdateTask(string description, Task task)   // update overloads
+        {
+            task.Description = description;
+        }
+        public void UpdateTask(Task task, DateTime dueDate)
+        {
+            task.DueDate = dueDate;
+        }
+        public void UpdateTask(Task task, Level priority)
+        {
+            task.Priority = priority;
+        }
+        public void RemoveTask(Task task)               // DELETE
+        {
+            tasks.Remove(task);
         }
         public void Save()
         {
-            StreamWriter sw = new StreamWriter(DataFileName);
-            foreach (Task t in tasks)
-            {
-                sw.WriteLine(t.FullToString());
-            }
-            sw.Close();
+            tdh = new TaskDataHandler(tasks);
+            tdh.Save();
         }
         public void Load()
         {
-            StreamReader sr = new StreamReader(DataFileName);
-            string[] lines = sr.ReadToEnd().Split("\r\n");
-            if (lines.Length > 0)
-            {
-                foreach (string line in lines)
-                {
-                    if (line.Length > 0)
-                    {
-                        string?[] data = line.Split(";");
-                        Task t;
-                        if (data[1] == "" && data[2] == "")
-                        {
-                            t = new Task(data[0], Task.StringToLevel(data[3]));
-                            tasks.Add(t);
-                        }
-                        else if (data[1] == "" && data[2] != "")
-                        {
-                            t = new Task(data[0], DateTime.Parse(data[2]), Task.StringToLevel(data[3]));
-                            tasks.Add(t);
-                        }
-                        else if (data[1] != "" && data[2] == "")
-                        {
-                            t = new Task(data[0], data[1], Task.StringToLevel(data[3]));
-                            tasks.Add(t);
-                        }
-                        else if (data[1] != "" && data[2] != "")
-                        {
-                            t = new Task(data[0], data[1], DateTime.Parse(data[2]), Task.StringToLevel(data[3]));
-                            tasks.Add(t);
-                        }
-                        else
-                            throw new Exception("gg");
-
-                    }
-                }
-            }
-            else
-                throw new Exception("File does contain any tasks");
-            sr.Close();
+            tdh = new TaskDataHandler(tasks);
+            tasks = tdh.Load();
         }
     }
 }
