@@ -11,7 +11,7 @@ namespace Task_Manager.Task
         public string Name { get; set; }         // Title of the task.
         public string? Description { get; set; } // Optional description of the task.
         public DateTime? DueDate { get; set; }   // Optional due date of the task.
-        public Level Priority { get; set; }      // Priority of the task
+        public Level Priority { get; set; }      // Priority of the task.
 
         public Task(string name,string? description, DateTime? dueDate, Level priority)   // Main constructor
         {
@@ -23,7 +23,6 @@ namespace Task_Manager.Task
         public Task(string name, string? description, Level priority) : this(name,description, null, priority) { }  // Chained constructors.
         public Task(string name, DateTime? dueDate, Level priority) : this(name, null, dueDate, priority) { }
         public Task(string name, Level priority) : this(name, null, null, priority) { }
-
         public override string ToString()
         {
             if (DueDate != null && Description == null)

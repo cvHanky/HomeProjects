@@ -49,7 +49,7 @@ namespace Task_Manager.Task
         {
             tasks.Remove(task);
         }
-        public void Save()
+        public void Save()                              // Calls datahandler to properly save.
         {
             tdh = new TaskDataHandler(tasks);
             tdh.Save();
