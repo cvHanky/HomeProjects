@@ -10,13 +10,16 @@ namespace Task_Manager.Menu
     public class MenuItem
     {
         public string Content { get; set; }
+        public int Count { get; set; }         // Count returns
         public MenuItem(string content)
         {
-            Content = content;
-        }
-        public static void CRUDMenu()
-        {
-            // do something
+            string[] list = content.Split("\n");
+            list[0] += "   ";
+            foreach (string s in list)
+            {
+                Content += $"{s}\n";
+            }
+            Count = list.Length;
         }
     }
 }

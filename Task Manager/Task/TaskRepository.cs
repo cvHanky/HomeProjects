@@ -8,8 +8,12 @@ namespace Task_Manager.Task
 {
     public class TaskRepository
     {
-        private List<Task> tasks = new List<Task>();
+        public List<Task> tasks { get; set; }
         private TaskDataHandler tdh;
+        public TaskRepository()
+        {
+            tasks = new List<Task>();
+        }
 
         //   ####   CRUD   ####
 

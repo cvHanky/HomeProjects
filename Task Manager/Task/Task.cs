@@ -27,16 +27,18 @@ namespace Task_Manager.Task
         {
             if (DueDate != null && Description == null)
             {
-                return $"{Name}: PRIORITY {Priority}\nDue date: {DueDate.ToString()}";
+                return $"{Name}\nPRIORITY {Priority}\nDue date: {DueDate.ToString()}";
             }
             else if (DueDate == null && Description == null)
             {
-                return $"{Name}: PRIORITY {Priority}";
+                return $"{Name}\nPRIORITY {Priority}";
             }
             else if (DueDate != null && Description != null)
             {
-                return $"{Name}: PRIORITY {Priority}\n{Description}\nDue date: {DueDate.ToString()}";
+                return $"{Name}\nPRIORITY {Priority}\n{Description}\nDue date: {DueDate.ToString()}";
             }
+            else if (DueDate == null && Description != null)
+                return $"{Name}\nPRIORITY {Priority}\n{Description}";
             else return "";
         }
         public string FullToString()    // Used when saving the data.
