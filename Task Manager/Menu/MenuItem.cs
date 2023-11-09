@@ -13,13 +13,22 @@ namespace Task_Manager.Menu
         public int Count { get; set; }         // Count returns
         public MenuItem(string content)
         {
-            string[] list = content.Split("\n");
+            Content = content;
+            Count = Content.Split("\n").Length;
+        }
+        public void Write()
+        {
+            string[] list = Content.Split("\n");
             list[0] += "   ";
-            foreach (string s in list)
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(list[0]);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(list[1]);
+            Console.ForegroundColor = ConsoleColor.White;
+            for (int i = 2; i < list.Length; i++)
             {
-                Content += $"{s}\n";
+                Console.WriteLine(list[i]);
             }
-            Count = list.Length;
         }
     }
 }

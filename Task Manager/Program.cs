@@ -8,30 +8,33 @@ namespace Task_Manager.Task
     {
         static void Main(string[] args)
         {
-            TaskRepository tr1;
-            TaskRepository tr2;
+            //TaskRepository tr1;
+            //TaskRepository tr2;
             Menu.Menu testMenu;
-            Task t1, t2, t3, t4;
+            //Task t1, t2, t3, t4;
 
-            tr1 = new TaskRepository();
-            tr2 = new TaskRepository();
+            //tr1 = new TaskRepository();
+            //tr2 = new TaskRepository();
 
-            testMenu = new Menu.Menu(0,0);
+            testMenu = new Menu.Menu(0, 0);
 
-            t1 = new Task(name: "Get a haircut", Level.medium);
-            t2 = new Task(name: "Buy gift for dad", DateTime.Today.AddDays(24), Level.high);
-            t3 = new Task(name: "Get air blower", description: "found on ProShop.com for 300DKK", Level.low);
-            t4 = new Task(name: "Drink water", description: "please drink water", DateTime.Now, Level.urgent);
-            tr1.AddTask(t1);
-            tr1.AddTask(t2);
-            tr1.AddTask(t3);
-            tr1.AddTask(t4);
+            //t1 = new Task(name: "Get a haircut", Level.medium);
+            //t2 = new Task(name: "Buy gift for dad", DateTime.Today.AddDays(24), Level.high);
+            //t3 = new Task(name: "Get air blower", description: "found on ProShop.com for 300DKK", Level.low);
+            //t4 = new Task(name: "Drink water", description: "please drink water", DateTime.Now, Level.urgent);
+            //tr1.AddTask(t1);
+            //tr1.AddTask(t2);
+            //tr1.AddTask(t3);
+            //tr1.AddTask(t4);
+            //tr1.Save();
 
-            foreach (Task t in tr1.tasks)
-            {
-                MenuItem mItem = new MenuItem(t.ToString());
-                testMenu.AddMenuItem(mItem);
-            }
+            //foreach (Task t in tr1.tasks)
+            //{
+            //    MenuItem mItem = new MenuItem(t.ToString());
+            //    testMenu.AddMenuItem(mItem);
+            //}
+            Console.CursorVisible = false;
+            testMenu.LoadMenuItems();
             testMenu.Show();
             testMenu.MenuArrowMovement();
 

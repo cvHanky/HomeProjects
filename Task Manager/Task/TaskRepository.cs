@@ -16,7 +16,12 @@ namespace Task_Manager.Task
         }
 
         //   ####   CRUD   ####
-
+        public void CreateTask(string name, string? description, DateTime? dueDate, Level priority)
+        {
+            Task t = new Task(name, description, dueDate, priority);
+            AddTask(t);
+            Save();
+        }
         public void AddTask(Task task)                  // CREATE
         {
             tasks.Add(task);
@@ -53,15 +58,16 @@ namespace Task_Manager.Task
         {
             tasks.Remove(task);
         }
-        public void Save()                              // Calls datahandler to properly save.
+        public void Save()                              // Calls datahandler to properly save the current tasks in the repo.
         {
             tdh = new TaskDataHandler(tasks);
             tdh.Save();
         }
-        public void Load()
+        public List<Task> Load()                              // Calls datahandler to load the currently saved tasks.
         {
             tdh = new TaskDataHandler(tasks);
             tasks = tdh.Load();
+            return tasks;
         }
     }
 }

@@ -27,6 +27,7 @@ namespace Task_Manager.Task
         }
         public List<Task> Load()
         {
+            copyofTasks.Clear();
             StreamReader sr = new StreamReader(DataFileName);
             string[] lines = sr.ReadToEnd().Split("\r\n");
             if (lines.Length > 0)
