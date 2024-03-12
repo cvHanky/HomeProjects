@@ -10,6 +10,7 @@ namespace Task_Manager_UnitTest
 
         Task_Manager.Task.Task t1, t2, t3, t4;      // Unfortunate collision with System.Threading.Tasks.Task, forcing the 
                                                     // specification of which namespace to draw the "Task" object from. 
+                                                    
 
         [TestInitialize]
         public void Init()

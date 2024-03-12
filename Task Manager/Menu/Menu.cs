@@ -123,7 +123,7 @@ namespace Task_Manager.Menu
                         countAfterRun = 0;
                     }
                     break;
-                case ConsoleKey.UpArrow:           // Mangler et fix ift. offset.
+                case ConsoleKey.UpArrow:           // Også færdig nu
                     if (count != 0)
                     {
                         int offsetAfterUp = offsetBefore - MenuItems[count - 1].Count - 2;
@@ -167,7 +167,7 @@ namespace Task_Manager.Menu
             }
             return countAfterRun;
         }
-        public void CreateTaskMenu()
+        public void CreateTaskMenu()       // Method for when creating new tasks.
         {
             string TaskName;
             Level TaskPriority = Level.low;
@@ -180,7 +180,7 @@ namespace Task_Manager.Menu
             Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), Console.WindowHeight / 2 - 5);
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write(s);
-            s = "Press enter to confirm";
+            s = "Press Enter to confirm";
             Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), 1);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(s);
@@ -232,7 +232,7 @@ namespace Task_Manager.Menu
             s = "Write a description for the task (optional)";
             Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), Console.WindowHeight / 2 - 5);
             Console.Write(s);
-            s = "Press enter to confirm";
+            s = "Press Enter to confirm";
             Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), 1);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(s);
@@ -254,7 +254,7 @@ namespace Task_Manager.Menu
                     s = "How many days from today should the task be due?";
                     Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), Console.WindowHeight / 2 - 5);
                     Console.Write(s);
-                    s = "Press enter to confirm";
+                    s = "Press Enter to confirm";
                     Console.SetCursorPosition((Console.WindowWidth / 2) - (s.Length / 2), 1);
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write(s);

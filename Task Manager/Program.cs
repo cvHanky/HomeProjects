@@ -2,7 +2,7 @@
 using Task_Manager.Menu;
 using Task_Manager.Task;
 
-namespace Task_Manager.Task
+namespace Task_Manager
 {
     internal class Program
     {

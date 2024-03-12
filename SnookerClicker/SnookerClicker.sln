@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnookerClicker", "SnookerClicker.csproj", "{7D81BC6C-14D5-4E6D-A539-8AF9A8AD7EDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D81BC6C-14D5-4E6D-A539-8AF9A8AD7EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D81BC6C-14D5-4E6D-A539-8AF9A8AD7EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D81BC6C-14D5-4E6D-A539-8AF9A8AD7EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D81BC6C-14D5-4E6D-A539-8AF9A8AD7EDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E61FB56-4296-4B80-B747-167F7EF38A11}
+	EndGlobalSection
+EndGlobal

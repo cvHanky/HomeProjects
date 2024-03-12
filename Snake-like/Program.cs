@@ -20,7 +20,7 @@
             do
             {
                 Console.Clear();
-                game.MakeBorder(true);
+                game.MakeBorder(false);
                 Console.Clear();
                 game.MakeBorder(true);
                 game.RunSnake();
