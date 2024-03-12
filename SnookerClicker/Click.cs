@@ -8,18 +8,11 @@ namespace SnookerClicker
 {
     public class Click
     {
-        public Click? PreviousClick { get; set; }
+        public string Purpose { get; set; }
 
-        public Click(Click? previousClick)
+        public Click(string purpose)
         {
-            PreviousClick = previousClick;
-        }
-        public Click() { }
-
-
-        public void Pot()
-        {
-
+            Purpose = purpose;
         }
     }
 }
