@@ -46,5 +46,11 @@ namespace AnimationsInWPF
             Storyboard sb = (Storyboard)this.Resources["RobotHover"];
             sb.Stop();
         }
+
+        private void imgRobot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)this.Resources["RobotChoose"];
+            sb.Begin();
+        }
     }
 }

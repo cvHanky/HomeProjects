@@ -85,7 +85,7 @@
                 Storyboard.TargetProperty="Margin"
                 From="592,177,0,0"
                 To="602,177,0,0"
-                Duration="0:0:1" />
+                Duration="0:0:0.7" />
             <DoubleAnimation
                 AutoReverse="False"
                 RepeatBehavior="Forever"
@@ -93,7 +93,7 @@
                 Storyboard.TargetProperty="Opacity"
                 From="0.4"
                 To="0.0"
-                Duration="0:0:1" />
+                Duration="0:0:0.7" />
             <!--  Animates the left part  -->
             <ThicknessAnimation
                 AutoReverse="False"
@@ -102,7 +102,7 @@
                 Storyboard.TargetProperty="Margin"
                 From="592,177,0,0"
                 To="582,177,0,0"
-                Duration="0:0:1" />
+                Duration="0:0:0.7" />
             <DoubleAnimation
                 AutoReverse="False"
                 RepeatBehavior="Forever"
@@ -110,7 +110,34 @@
                 Storyboard.TargetProperty="Opacity"
                 From="0.4"
                 To="0.0"
-                Duration="0:0:1" />
+                Duration="0:0:0.7" />
+        </Storyboard>
+
+        <Storyboard x:Key="RobotChoose">
+            <ThicknessAnimation
+                Storyboard.TargetName="imgRobotL"
+                Storyboard.TargetProperty="Margin"
+                From="592,177,0,0"
+                To="562,192,0,0"
+                Duration="0:0:2.5" />
+            <DoubleAnimation
+                Storyboard.TargetName="imgRobotL"
+                Storyboard.TargetProperty="Opacity"
+                From="0.5"
+                To="0"
+                Duration="0:0:2.5" />
+            <ThicknessAnimation
+                Storyboard.TargetName="imgRobotR"
+                Storyboard.TargetProperty="Margin"
+                From="592,177,0,0"
+                To="622,162,0,0"
+                Duration="0:0:2.5" />
+            <DoubleAnimation
+                Storyboard.TargetName="imgRobotR"
+                Storyboard.TargetProperty="Opacity"
+                From="0.5"
+                To="0"
+                Duration="0:0:2.5" />
         </Storyboard>
     </Window.Resources>
 
@@ -171,7 +198,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             MouseEnter="imgRobot_MouseEnter"
-            MouseLeave="imgRobot_MouseLeave">
+            MouseLeave="imgRobot_MouseLeave"
+            MouseLeftButtonDown="imgRobot_MouseLeftButtonDown">
             <Image.Source>
                 <BitmapImage DecodePixelWidth="200" UriSource="Models/PixelArt robot.png" />
             </Image.Source>
