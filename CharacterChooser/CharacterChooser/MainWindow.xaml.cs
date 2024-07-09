@@ -18,7 +18,8 @@ namespace CharacterChooser
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        // Databound properties
+        #region Properties
+
         private Thickness myFrom;
 
         public Thickness MyFrom
@@ -68,13 +69,25 @@ namespace CharacterChooser
         //    set { sbClone = value; OnPropertyChanged(nameof(SbClone)); }
         //}
 
+        #endregion
 
         public MainWindow()
         {
             InitializeComponent();
+            // Initialize borders around grids.
+            foreach (RowDefinition rd in CharacterGrid.RowDefinitions)
+            {
+                foreach (ColumnDefinition cd in CharacterGrid.ColumnDefinitions)
+                {
+                    Border border = new Border();
+                    Grid.SetRow(border, CharacterGrid.RowDefinitions.IndexOf(rd));
+                    Grid.SetColumn(border, CharacterGrid.ColumnDefinitions.IndexOf(cd));
+                    border.BorderBrush = Brushes.Black;
+                    border.BorderThickness = new Thickness(1.5);
+                    CharacterGrid.Children.Add(border);
+                }
+            }
         }
-
-
 
         private void Character_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -89,19 +102,19 @@ namespace CharacterChooser
                 // Clone the storyboard to prevent conflicts. We also make clones of the image, in order to animate when hovering. 
                 Storyboard sbCloneL = sbL.Clone();
                 Storyboard sbCloneR = sbR.Clone();
-                Image cloneLeft = CreateImageClone(image); cloneLeft.Name = "cloneL"; CharacterGrid.Children.Add(cloneLeft);
-                Image cloneRight = CreateImageClone(image); cloneRight.Name = "cloneR"; CharacterGrid.Children.Add(cloneRight);
+                Image cloneLeft = CreateImageClone(image, CharacterGrid, Grid.GetRow(image), Grid.GetColumn(image)); cloneLeft.Name = "cloneL"; CharacterGrid.Children.Add(cloneLeft);
+                Image cloneRight = CreateImageClone(image, CharacterGrid, Grid.GetRow(image), Grid.GetColumn(image)); cloneRight.Name = "cloneR"; CharacterGrid.Children.Add(cloneRight);
 
 
                 // Giving value to the properties for databinding. 
                 MyFrom = new Thickness(image.Margin.Left, image.Margin.Top, image.Margin.Right, image.Margin.Bottom);
-                MyToL = new Thickness(image.Margin.Left - 10, image.Margin.Top, image.Margin.Right, image.Margin.Bottom);
-                MyToR = new Thickness(image.Margin.Left + 10, image.Margin.Top, image.Margin.Right, image.Margin.Bottom);
+                MyToL = new Thickness(image.Margin.Left - 20, image.Margin.Top, image.Margin.Right, image.Margin.Bottom);
+                MyToR = new Thickness(image.Margin.Left + 20, image.Margin.Top, image.Margin.Right, image.Margin.Bottom);
                 ImgNameL = cloneLeft.Name;
                 ImgNameR = cloneRight.Name;
 
                 cloneLeft.DataContext = new { MyFrom = myFrom, MyToL = myToL };
-                cloneRight.DataContext = new {MyFrom = myFrom, MyToR = myToR };
+                cloneRight.DataContext = new { MyFrom = myFrom, MyToR = myToR };
 
                 var animations = sbCloneL.Children.OfType<ThicknessAnimationUsingKeyFrames>().ToList();
                 foreach (ThicknessAnimationUsingKeyFrames animation in animations)
@@ -140,8 +153,154 @@ namespace CharacterChooser
             }
         }
 
+        private void Character_Choose(object sender, MouseEventArgs e)
+        {
+            var image = sender as Image;
+
+            if (image != null)
+            {
+                // The image is made unhittable in order to stop the idle animation. Also prevents pressing it multiple times. 
+                // All other character images are made HitTestVisible to let the idle animation play on the other images still. 
+                image.IsHitTestVisible = false;
+                image.Opacity = 0;
+                foreach (var charImage in CharacterGrid.Children.OfType<Image>().Where(img => img != image && img.Name != ImgNameL && img.Name != ImgNameR).ToList())
+                {
+                    charImage.IsHitTestVisible = true;
+                    charImage.Opacity = 1;
+                }
+
+                // First, the current chosen character is removed from the screen (if it exists). 
+                foreach (var canv in CharacterGrid.Children.OfType<Canvas>().Where(canvas => canvas.Name == "ChosenCharacterCanvas").ToList())
+                {
+                    CharacterGrid.Children.Remove(canv);
+                }
+                foreach (var bigImg in ChosenCharacterGrid.Children.OfType<Image>().Where(img => img.Name == "ChosenImage").ToList())
+                {
+                    ChosenCharacterGrid.Children.Remove(bigImg);
+                }
+
+                // Then, a canvas is created for the new chosen character. 
+                Canvas canvas = new Canvas
+                {
+                    Width = image.Width,
+                    Height = image.Height,
+                    Name = "ChosenCharacterCanvas"
+                };
+                Grid.SetRow(canvas, Grid.GetRow(image));
+                Grid.SetColumn(canvas, Grid.GetColumn(image));
+                CharacterGrid.Children.Add(canvas);
+
+                // Now, the image is cloned for animation. Also it is added as a child to the canvas. 
+                Image canvImage = CreateImageClone(image); canvImage.Name = "canvasImage"; canvas.Children.Add(canvImage);
+
+                // Another image is cloned, used for the latter part of the animation. 
+                Image bigImage = CreateImageClone(image, ChosenCharacterGrid, 1, 1); bigImage.Name = "ChosenImage";
+                bigImage.Width = 1; //115
+                bigImage.Height = 300;
+                bigImage.Opacity = 0;
+                ChosenCharacterGrid.Children.Add(bigImage);
+
+                // Finally the storyboard is setup.
+                Storyboard sb = new Storyboard();
+
+                // Animations are added.
+                double duration = 1;
+                // Animation for the small images to disappear upwards. 
+                DoubleAnimationUsingKeyFrames yMovement = new DoubleAnimationUsingKeyFrames
+                {
+                    Duration = TimeSpan.FromSeconds(duration)
+                };
+
+                yMovement.KeyFrames.Add(new LinearDoubleKeyFrame
+                {
+                    Value = 0,
+                    KeyTime = TimeSpan.FromSeconds(0)
+                });
+                yMovement.KeyFrames.Add(new SplineDoubleKeyFrame
+                {
+                    Value = 20,
+                    KeyTime = TimeSpan.FromSeconds(duration / 3),
+                    KeySpline = new KeySpline(0.5, 0, 0.5, 1)
+                });
+                yMovement.KeyFrames.Add(new SplineDoubleKeyFrame
+                {
+                    Value = -200,
+                    KeyTime = TimeSpan.FromSeconds(duration),
+                    KeySpline = new KeySpline(0.5, 0, 0.5, 1)
+                });
+                Storyboard.SetTarget(yMovement, canvImage);
+                Storyboard.SetTargetProperty(yMovement, new PropertyPath(Canvas.TopProperty));
+                sb.Children.Add(yMovement);
+
+                DoubleAnimationUsingKeyFrames enlargeChosenChar = new DoubleAnimationUsingKeyFrames
+                {
+                    Duration = TimeSpan.FromSeconds(duration + 1)
+                };
+
+                enlargeChosenChar.KeyFrames.Add(new LinearDoubleKeyFrame
+                {
+                    Value = 1,
+                    KeyTime = TimeSpan.FromSeconds(0)
+                });
+                enlargeChosenChar.KeyFrames.Add(new LinearDoubleKeyFrame
+                {
+                    Value = 1,
+                    KeyTime = TimeSpan.FromSeconds(duration)
+                });
+                enlargeChosenChar.KeyFrames.Add(new LinearDoubleKeyFrame
+                {
+                    Value = 115,
+                    KeyTime = TimeSpan.FromSeconds(duration + 1)
+                });
+                Storyboard.SetTarget(enlargeChosenChar, bigImage);
+                Storyboard.SetTargetProperty(enlargeChosenChar, new PropertyPath(Image.WidthProperty));
+                sb.Children.Add(enlargeChosenChar);
+
+                DoubleAnimationUsingKeyFrames visibilityChosenChar = new DoubleAnimationUsingKeyFrames
+                {
+                    Duration = TimeSpan.FromSeconds(duration + 1)
+                };
+
+                visibilityChosenChar.KeyFrames.Add(new LinearDoubleKeyFrame
+                {
+                    Value = 0,
+                    KeyTime = TimeSpan.Zero
+                });
+                visibilityChosenChar.KeyFrames.Add(new DiscreteDoubleKeyFrame
+                {
+                    Value = 1,
+                    KeyTime = TimeSpan.FromSeconds(duration)
+                });
+                Storyboard.SetTarget(visibilityChosenChar, bigImage);
+                Storyboard.SetTargetProperty(visibilityChosenChar, new PropertyPath(Image.OpacityProperty));
+                sb.Children.Add(visibilityChosenChar);
+
+                sb.Begin();
+            }
+        }
+
         /// <summary>
-        /// Creates a clone of an image, and sets the IsHitTestVisible property to false.
+        /// Creates a clone of an image, and sets the IsHitTestVisible property to false. Also sets the row and column to the same as the image.
+        /// </summary>
+        private Image CreateImageClone(Image img, Grid targetGrid, int row, int column)
+        {
+            Image clone = new Image
+            {
+                Width = img.Width,
+                Height = img.Height,
+                Source = img.Source,
+                Margin = img.Margin,
+                HorizontalAlignment = img.HorizontalAlignment,
+                VerticalAlignment = img.VerticalAlignment,
+                IsHitTestVisible = false
+            };
+            Grid.SetRow(clone, row);
+            Grid.SetColumn(clone, column);
+            return clone;
+        }
+
+        /// <summary>
+        /// Creates a clone of an image, and sets the IsHitTestVisible property to false. Does not set the row and column (used when adding image to canvas).
         /// </summary>
         private Image CreateImageClone(Image img)
         {
@@ -155,6 +314,7 @@ namespace CharacterChooser
                 VerticalAlignment = img.VerticalAlignment,
                 IsHitTestVisible = false
             };
+
             return clone;
         }
 
